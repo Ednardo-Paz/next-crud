@@ -1,29 +1,34 @@
-
 import Layout from '../components/Layout'
 import Tabela from '../components/Tabela'
-import Cliente from '../core/cliente'
+import Cliente from '../core/Cliente'
 import Botao from '../components/Botao'
 import Formulario from '../components/Formulario'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import ClienteRepositorio from '../backend/ClienteRepositorio'
+import ColecaoCliente from '../backend/db/ColecaoCliente'
+
 
 export default function Home() {
+  const repo: ClienteRepositorio = new ColecaoCliente()
+
+
   const [visivel, setVisivel] = useState<'tabela' | 'form'>('tabela')
   const [cliente, setCliente] = useState<Cliente>(Cliente.vazio())
-  const clientes = [
-    new Cliente("Ana", 34, "1"),
-    new Cliente("Bia", 45, "2"),
-    new Cliente("Carlos", 23, "3"),
-    new Cliente("Pedro", 54, "4"),
-  ]
+  const [clientes, setClientes] = useState<Cliente[]>([])
+
+  useEffect(() => {
+    repo.obterTodos().then(setClientes)
+  }, [cliente, clientes])
+
   function clienteSelecionado(cliente: Cliente) {
     setCliente(cliente)
     setVisivel("form")
   }
   function clienteExcluido(cliente: Cliente) {
-    console.log(`Excluir...${cliente.nome}`);
+    repo.excluir(cliente)
   }
   function salvarCliente(cliente: Cliente) {
-    console.log(cliente);
+    repo.savar(cliente)
     setVisivel("tabela")
   }
   function clientenovo() {
@@ -56,12 +61,6 @@ export default function Home() {
           cancelado={() => setVisivel('tabela')}
           clienteMoudou={salvarCliente}
         />}
-
-
-
-
-
-
       </Layout>
     </div>
   )
