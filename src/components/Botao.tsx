@@ -6,7 +6,7 @@ interface BotaoProps {
 }
 export default function botao({ onClick, children, cor, className }: BotaoProps) {
   const hasCor = cor ?? 'gray'
-  console.log(hasCor);
+
 
   return (
     <button onClick={onClick} className={`
