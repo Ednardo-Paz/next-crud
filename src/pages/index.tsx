@@ -6,35 +6,11 @@ import Formulario from '../components/Formulario'
 import { useEffect, useState } from 'react'
 import ClienteRepositorio from '../backend/ClienteRepositorio'
 import ColecaoCliente from '../backend/db/ColecaoCliente'
+import useClientes from '../hooks/useClientes'
 
 
 export default function Home() {
-  const repo: ClienteRepositorio = new ColecaoCliente()
-
-
-  const [visivel, setVisivel] = useState<'tabela' | 'form'>('tabela')
-  const [cliente, setCliente] = useState<Cliente>(Cliente.vazio())
-  const [clientes, setClientes] = useState<Cliente[]>([])
-
-  useEffect(() => {
-    repo.obterTodos().then(setClientes)
-  }, [cliente, clientes])
-
-  function clienteSelecionado(cliente: Cliente) {
-    setCliente(cliente)
-    setVisivel("form")
-  }
-  function clienteExcluido(cliente: Cliente) {
-    repo.excluir(cliente)
-  }
-  function salvarCliente(cliente: Cliente) {
-    repo.savar(cliente)
-    setVisivel("tabela")
-  }
-  function clientenovo() {
-    setVisivel("form")
-    setCliente(Cliente.vazio())
-  }
+  const { clienteExcluido, clienteSelecionado, clientenovo, salvarCliente, cliente, setVisivel, visivel, clientes } = useClientes()
 
 
   return (
