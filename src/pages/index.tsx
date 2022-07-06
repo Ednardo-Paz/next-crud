@@ -1,11 +1,7 @@
 import Layout from '../components/Layout'
 import Tabela from '../components/Tabela'
-import Cliente from '../core/Cliente'
 import Botao from '../components/Botao'
 import Formulario from '../components/Formulario'
-import { useEffect, useState } from 'react'
-import ClienteRepositorio from '../backend/ClienteRepositorio'
-import ColecaoCliente from '../backend/db/ColecaoCliente'
 import useClientes from '../hooks/useClientes'
 
 

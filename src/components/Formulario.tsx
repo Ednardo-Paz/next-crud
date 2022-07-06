@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Cliente from "../core/cliente";
+import Cliente from "../core/Cliente";
 import Entrada from "./Entrada";
 import Botao from './Botao'
 interface FormularioProps {
