@@ -1,3 +1,4 @@
+import { async } from "@firebase/util"
 import { useEffect, useState } from "react"
 import ClienteRepositorio from "../backend/ClienteRepositorio"
 import ColecaoCliente from "../backend/db/ColecaoCliente"
@@ -11,10 +12,21 @@ export default function useClientes() {
   const [visivel, setVisivel] = useState<'tabela' | 'form'>('tabela')
   const [cliente, setCliente] = useState<Cliente>(Cliente.vazio())
   const [clientes, setClientes] = useState<Cliente[]>([])
+  const [carregando, setCarregando] = useState(false)
 
   useEffect(() => {
-    repo.obterTodos().then(setClientes)
-  }, [cliente, clientes])
+    obterTodos()
+  }, [])
+
+
+  function obterTodos() {
+    setCarregando(true)
+    repo.obterTodos().then(resp => {
+      setClientes(resp)
+      setCarregando(false)
+    })
+  }
+
 
   function clienteSelecionado(cliente: Cliente) {
     setCliente(cliente)
@@ -22,10 +34,12 @@ export default function useClientes() {
   }
   function clienteExcluido(cliente: Cliente) {
     repo.excluir(cliente)
+    obterTodos()
   }
-  function salvarCliente(cliente: Cliente) {
-    repo.savar(cliente)
+  async function salvarCliente(cliente: Cliente) {
+    await repo.savar(cliente)
     setVisivel("tabela")
+    obterTodos()
   }
   function clientenovo() {
     setVisivel("form")
@@ -40,6 +54,7 @@ export default function useClientes() {
     clientenovo,
     clienteExcluido,
     clienteSelecionado,
+    carregando,
   }
 }
 

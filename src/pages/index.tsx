@@ -6,8 +6,9 @@ import useClientes from '../hooks/useClientes'
 
 
 export default function Home() {
-  const { clienteExcluido, clienteSelecionado, clientenovo, salvarCliente, cliente, setVisivel, visivel, clientes } = useClientes()
+  const { clienteExcluido, clienteSelecionado, clientenovo, salvarCliente, cliente, setVisivel, visivel, clientes, carregando } = useClientes()
 
+  console.log(carregando);
 
   return (
     <div className={`
@@ -16,23 +17,31 @@ export default function Home() {
       text-white
     `}>
       <Layout titulo='Cadastro Simples'>
-        {visivel === "tabela" ? (
+        {carregando ? <p>Carregando...</p> : (
           <>
-            <div className='flex justify-end'>
-              <Botao
-                onClick={clientenovo}
-                cor='green'
-                className='mb-4'>
-                Novo Cliente
-              </Botao>
-            </div>
-            <Tabela clientes={clientes} clienteSelecionado={clienteSelecionado} clienteExcluido={clienteExcluido} />
+            {visivel === "tabela" ? (
+              <>
+                <div className='flex justify-end'>
+                  <Botao
+                    onClick={clientenovo}
+                    cor='green'
+                    className='mb-4'>
+                    Novo Cliente
+                  </Botao>
+                </div>
+                <Tabela clientes={clientes} clienteSelecionado={clienteSelecionado} clienteExcluido={clienteExcluido} />
+              </>
+            ) :
+              <Formulario
+                cliente={cliente}
+                cancelado={() => setVisivel('tabela')}
+                clienteMoudou={salvarCliente}
+              />}
           </>
-        ) : <Formulario
-          cliente={cliente}
-          cancelado={() => setVisivel('tabela')}
-          clienteMoudou={salvarCliente}
-        />}
+        )
+
+        }
+
       </Layout>
     </div>
   )
