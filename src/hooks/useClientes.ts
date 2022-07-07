@@ -21,9 +21,10 @@ export default function useClientes() {
 
   function obterTodos() {
     setCarregando(true)
-    repo.obterTodos().then(
-      setClientes,
-      setCarregando(false)
+    repo.obterTodos().then((resp) => {
+      setClientes(resp),
+        setCarregando(true)
+    }
     )
   }
 
